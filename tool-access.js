@@ -1,5 +1,3 @@
-// tool-access.js - Ganti NRP dengan Kode
-
 function checkToolAccess(toolName) {
     const userSession = JSON.parse(sessionStorage.getItem('userSession'));
     
@@ -7,6 +5,21 @@ function checkToolAccess(toolName) {
         alert('Silakan login terlebih dahulu');
         window.location.href = 'login-otp.html';
         return false;
+    }
+
+    // CEK APAKAH MEMBER DI-BAN
+    const banned = JSON.parse(localStorage.getItem('bannedMembers')) || [];
+    const isBanned = banned.find(b => b.memberId === userSession.id);
+
+    if (isBanned) {
+        const now = new Date().getTime();
+        const sisaMs = isBanned.unbanTime - now;
+        
+        if (sisaMs > 0) {
+            const sisaJam = Math.ceil(sisaMs / (1000 * 60 * 60));
+            alert(`❌ Akun Anda sedang DI-BAN!\n\nAlasan: ${isBanned.reason}\nSisa waktu ban: ${sisaJam} jam`);
+            return false;
+        }
     }
 
     // Admin bypass
