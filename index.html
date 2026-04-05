@@ -1,168 +1,30 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gibikey Studio | Te Kaka Punya</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .hero-gradient { background: radial-gradient(circle at top right, #1e40af, transparent), radial-gradient(circle at bottom left, #1e1b4b, transparent); }
-        .card-hover:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3); }
-        .badge-polri { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
-        
-        .logo-container { position: relative; display: inline-block; }
-        .logo-container::after {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 140%; height: 140%; background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%); z-index: -1;
-        }
-    </style>
-</head>
-<body class="text-slate-200 min-h-screen">
-
-    <nav class="sticky top-0 z-50 glass px-6 py-4 flex justify-between items-center border-b border-slate-800">
-        <div class="flex flex-col">
-            <span class="font-black text-xl tracking-tighter uppercase italic leading-none">
-                GIBIKEY<span class="text-blue-500">STUDIO</span>
-            </span>
-            <span class="text-[9px] text-slate-500 font-bold tracking-[0.3em] uppercase">Field-Ops Center</span>
-        </div>
-        <div class="flex gap-3">
-            <button onclick="window.location.href='https://wa.me/6285298833350'" 
-                    class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-blue-900/20 flex items-center gap-2">
-                <i class="fab fa-whatsapp text-sm"></i>
-                <span class="hidden md:inline">HUBUNGI SAYA</span>
-            </button>
-        </div>
-    </nav>
-
-    <header class="hero-gradient pt-16 pb-24 px-6 text-center flex flex-col items-center">
-        <div class="logo-container mb-16 relative">
-            <div class="absolute inset-0 bg-blue-600/20 blur-[80px] rounded-full scale-150 -z-10"></div>
-            <img src="logo-gbk.png" alt="GBK Logo" class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-[0_0_35px_rgba(59,130,246,0.8)] hover:scale-105 transition-transform duration-500">
-        </div>
-        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight uppercase italic">
-            Gibikey-Studio <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Tool</span>
-        </h1>
-        <p class="max-w-2xl mx-auto text-slate-400 text-sm md:text-lg">
-            Koleksi aplikasi taktis untuk otomatisasi administrasi, dan operasional Polri oleh <span class="text-white font-bold">BRIPKA MOHAMAD KHAIR</span>.
-        </p>
-    </header>
-
-    <main class="max-w-6xl mx-auto px-6 -mt-16 pb-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-blue-500/10 text-blue-500 rounded-xl"><i class="fas fa-wallet text-2xl"></i></div>
-                    <span class="bg-amber-500 text-[10px] text-slate-900 font-extrabold px-2 py-1 rounded">PRO v3.5</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Tagihan Milenial v3.5</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Kalkulasi otomatis tunggakan, log catatan rencana bayar multi-entry, dan dashboard real-time.</p>
-                <a href="https://kkappolo3-blip.github.io/Gibikey-Tool-Tagihan-Log-Catatan-v3.5/" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold text-xs text-center uppercase tracking-wider transition-all">Buka Tool</a>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-cyan-500/10 text-cyan-500 rounded-xl"><i class="fas fa-camera text-2xl"></i></div>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Timestamp Progege</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Geotagging foto lapangan v2.6 dengan watermark otomatis untuk dokumentasi tugas Polri.</p>
-                <a href="https://kkappolo3-blip.github.io/KHAIR-TIMESTAMP-PRO.GG-V2.6/" target="_blank" class="w-full bg-cyan-600 hover:bg-cyan-700 py-3 rounded-xl font-bold text-xs text-center uppercase tracking-wider transition-all">Buka Tool</a>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-indigo-500/10 text-indigo-500 rounded-xl"><i class="fas fa-terminal text-2xl"></i></div>
-                    <span class="bg-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-1 rounded tracking-tighter">IDE HUB</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Command Center</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Pusat kendali ide dan manajemen project Gibikey Studio (Tampilan lebe gaga).</p>
-                <a href="https://kkappolo3-blip.github.io/Command-Center/" target="_blank" class="w-full bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-bold text-xs text-center uppercase tracking-wider transition-all">Buka Tool</a>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-pink-500/10 text-pink-500 rounded-xl"><i class="fas fa-microphone-alt text-2xl"></i></div>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Gibikey Karaoke</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Player karaoke neon style tanpa iklan untuk melepas penat setelah tugas lapangan.</p>
-                <a href="https://karaoke-neon-fix.vercel.app" target="_blank" class="w-full bg-pink-600 hover:bg-pink-700 py-3 rounded-xl font-bold text-xs text-center uppercase tracking-wider transition-all">Mulai Karaoke</a>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-green-500/10 text-green-500 rounded-xl"><i class="fas fa-seedling text-2xl"></i></div>
-                    <span class="badge-polri text-[9px] font-extrabold px-2 py-1 rounded tracking-widest uppercase"><i class="fas fa-lock mr-1"></i> Polri</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-green-400">Ketapang Khair v2.0</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Monitoring ketahanan pangan. Fitur khusus edit tanggal dan rekap data.</p>
-                <button onclick="mintaAkses('https://ketapang-replit-tampilanbaru.vercel.app/')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold text-xs text-center flex items-center justify-center transition-all uppercase">
-                    <i class="fas fa-key mr-2 text-amber-500"></i> Akses Terbatas
-                </button>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-red-500/10 text-red-500 rounded-xl"><i class="fas fa-exclamation-triangle text-2xl"></i></div>
-                    <span class="badge-polri text-[9px] font-extrabold px-2 py-1 rounded tracking-widest uppercase"><i class="fas fa-lock mr-1"></i> Polri</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-red-400">Kesiapsiagaan</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Manajemen kesiapan personel PC. Monitoring kehadiran dan siaga regu.</p>
-                <button onclick="mintaAkses('https://kesiapsiagaan.vercel.app/')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold text-xs text-center flex items-center justify-center transition-all uppercase">
-                    <i class="fas fa-key mr-2 text-amber-500"></i> Akses Terbatas
-                </button>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col bg-gradient-to-br from-orange-950/20 to-transparent">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-1 glass rounded-xl border border-orange-700/30">
-                        <img src="logo-bhabin-gemoy.png" alt="Logo" class="w-14 h-14 object-contain">
-                    </div>
-                    <span class="badge-polri text-[9px] font-extrabold px-2 py-1 rounded tracking-widest uppercase"><i class="fas fa-lock mr-1"></i> Polri</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-orange-400">Bhabin Gemoy</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Database warga binaan dan profil desa khusus Bhabinkamtibmas Polsek Tolinggula.</p>
-                <button onclick="mintaAkses('https://bhabingemoy-unlimited-main.vercel.app/')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold text-xs text-center flex items-center justify-center transition-all uppercase border border-orange-900/50">
-                    <i class="fas fa-key mr-2 text-amber-500"></i> Akses Terbatas
-                </button>
-            </div>
-
-            <div class="glass p-6 rounded-2xl card-hover transition-all border border-slate-700 flex flex-col bg-gradient-to-br from-emerald-950/20 to-transparent">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-xl"><i class="fas fa-handshake text-2xl"></i></div>
-                    <span class="bg-emerald-500 text-[10px] text-slate-900 font-extrabold px-2 py-1 rounded uppercase tracking-tighter">Public</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-emerald-400">Makelar Gorontalo</h3>
-                <p class="text-[11px] text-slate-400 mb-6 flex-grow">Platform jual-beli mobil, motor, & properti real-time berbasis Supabase. Verifikasi KTP/Selfie.</p>
-                <a href="https://kkappolo3-blip.github.io/Makelar-Gorontalo/" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 py-3 rounded-xl font-bold text-xs text-center uppercase tracking-wider transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2">
-                    <i class="fas fa-external-link-alt text-[10px]"></i> Kunjungi Platform
-                </a>
-            </div>
-
-        </div>
-    </main>
-
-    <footer class="mt-12 border-t border-slate-800 py-12 text-center text-slate-500">
-        <p class="text-sm mb-2 uppercase tracking-widest font-bold text-blue-400">BRIPKA MOHAMAD KHAIR</p>
-        <p class="text-[10px] italic">"Punya ide untuk bikin tool? klik tombol 'hubungi saya' di sudut kanan atas"</p>
-    </footer>
-
+    <title>Gibikey Studio Tool</title>
     <script>
-        function mintaAkses(linkTujuan) {
-            const daftarNRP = ["88040773"]; // Sederhanakan daftar NRP jika isinya sama semua
-            const nrpInput = prompt("SISTEM KEAMANAN GIBIKEY\nHANYA DIAKSES OLEH ANGGOTA POLRI\nMasukkan NRP Anda:");
-            if (nrpInput === null) return; 
-            if (daftarNRP.includes(nrpInput)) {
-                alert("NRP Terverifikasi. Selamat bekerja, Salam Presisi!");
-                window.open(linkTujuan, "_blank");
+        // Check for user session
+        function checkUserSession() {
+            // Simulating session check, replace with actual session validation
+            let userSession = sessionStorage.getItem('userSession');
+
+            if (!userSession) {
+                // Redirect to login page if session is not valid
+                window.location.href = 'login-otp.html';
             } else {
-                alert("AKSES DITOLAK!\nHubungi Admin WEB (Pojok kanan atas).");
+                // If session is valid, you might want to load user data, etc.
+                console.log('User session valid.');
             }
         }
+
+        // Call the function on load
+        window.onload = checkUserSession;
     </script>
+</head>
+<body>
+    <h1>Welcome to Gibikey Studio Tool</h1>
+    <p>This tool manages various GitHub integrations.</p>
 </body>
 </html>
