@@ -6,38 +6,57 @@ function handleLogin() {
         return;
     }
 
-    // CEK APAKAH MEMBER DI-BAN
-    const banned = JSON.parse(localStorage.getItem('bannedMembers')) || [];
-    const isBanned = banned.find(b => b.memberId === memberId);
+    try {
+        // 1. CEK STATUS BAN
+        let banned = JSON.parse(localStorage.getItem('bannedMembers')) || [];
+        const bannedIndex = banned.findIndex(b => b.memberId === memberId);
 
-    if (isBanned) {
-        const now = new Date().getTime();
-        const sisaMs = isBanned.unbanTime - now;
-        
-        if (sisaMs > 0) {
-            const sisaJam = Math.ceil(sisaMs / (1000 * 60 * 60));
-            showAlert(`❌ Akun Anda sedang DI-BAN! Alasan: ${isBanned.reason}\n\nSisa waktu ban: ${sisaJam} jam`, 'error');
+        if (bannedIndex !== -1) {
+            const banData = banned[bannedIndex];
+            const now = new Date().getTime();
+            const sisaMs = banData.unbanTime - now;
+            
+            if (sisaMs > 0) {
+                // Jika masih dibanned, hitung jam dan menit
+                const sisaJam = Math.floor(sisaMs / (1000 * 60 * 60));
+                const sisaMenit = Math.ceil((sisaMs % (1000 * 60 * 60)) / (1000 * 60));
+                
+                let teksWaktu = sisaJam > 0 ? `${sisaJam} jam ${sisaMenit} menit` : `${sisaMenit} menit`;
+                
+                showAlert(`❌ Akun Anda sedang DI-BAN!\nAlasan: ${banData.reason}\nSisa waktu: ${teksWaktu}`, 'error');
+                return;
+            } else {
+                // Jika waktu ban sudah habis, hapus dari daftar ban (Auto-Unban)
+                banned.splice(bannedIndex, 1);
+                localStorage.setItem('bannedMembers', JSON.stringify(banned));
+            }
+        }
+
+        // 2. CEK APAKAH MEMBER TERDAFTAR/DISETUJUI
+        const members = JSON.parse(localStorage.getItem('approvedMembers')) || [];
+        const member = members.find(m => m.id === memberId);
+
+        if (!member) {
+            showAlert('Member tidak ditemukan atau belum disetujui Admin!', 'error');
             return;
         }
+
+        // 3. SET SESSION & REDIRECT
+        sessionStorage.setItem('userSession', JSON.stringify({
+            id: member.id,
+            nama: member.nama,
+            isAdmin: false,
+            loginTime: new Date().toLocaleString('id-ID')
+        }));
+
+        showAlert(`✓ Selamat datang, ${member.nama}!`, 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'index.html'; // Pastikan nama file dashboard utamanya sesuai
+        }, 1500);
+
+    } catch (error) {
+        console.error("Error Sistem Login:", error);
+        showAlert('Terjadi kesalahan pada sistem. Silakan muat ulang halaman.', 'error');
     }
-
-    const members = JSON.parse(localStorage.getItem('approvedMembers')) || [];
-    const member = members.find(m => m.id === memberId);
-
-    if (!member) {
-        showAlert('Member tidak ditemukan!', 'error');
-        return;
-    }
-
-    sessionStorage.setItem('userSession', JSON.stringify({
-        id: member.id,
-        nama: member.nama,
-        isAdmin: false,
-        loginTime: new Date().toLocaleString('id-ID')
-    }));
-
-    showAlert(`✓ Selamat datang ${member.nama}!`, 'success');
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1500);
 }
