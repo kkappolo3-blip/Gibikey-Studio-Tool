@@ -22,7 +22,7 @@
                 <h1 class="text-2xl font-bold mb-2 uppercase tracking-tight">
                     <span class="text-blue-400">GIBIKEY</span>STUDIO
                 </h1>
-                <p class="text-slate-400 text-sm">Halaman Untuk Akses Member</p>
+                <p class="text-slate-400 text-sm">Sistem Akses Member</p>
             </div>
 
             <!-- Tab Selection -->
@@ -89,7 +89,7 @@
             <div id="adminForm" class="space-y-4 hidden">
                 <div>
                     <label class="block text-sm font-bold mb-2">Kode Admin</label>
-                    <input type="password" id="nrpAdmin" placeholder="Masukkan Kode Admin" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                    <input type="password" id="kodeAdmin" placeholder="Masukkan Kode Admin" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
                 </div>
                 <button onclick="handleAdminLogin()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-lg transition-all">
                     <i class="fas fa-shield-alt mr-2"></i> Login Admin
@@ -104,7 +104,7 @@
     </div>
 
     <script>
-        const adminNRP = "88040773";
+        const adminKode = "88040773";
 
         window.onload = () => {
             loadApprovedMembers();
@@ -250,18 +250,18 @@
         }
 
         function handleAdminLogin() {
-            const nrp = document.getElementById('nrpAdmin').value;
+            const kode = document.getElementById('kodeAdmin').value;
 
-            if (!nrp) {
+            if (!kode) {
                 showAlert('Masukkan Kode admin!', 'error');
                 return;
             }
 
-            if (nrp === adminNRP) {
+            if (kode === adminKode) {
                 sessionStorage.setItem('userSession', JSON.stringify({
                     nama: 'Kaka_Khair',
                     isAdmin: true,
-                    nrp: nrp,
+                    kode: kode,
                     loginTime: new Date().toLocaleString('id-ID')
                 }));
 
