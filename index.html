@@ -1,30 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gibikey Studio Tool</title>
-    <script>
-        // Check for user session
-        function checkUserSession() {
-            // Simulating session check, replace with actual session validation
-            let userSession = sessionStorage.getItem('userSession');
+    <title>Gibikey Studio - Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="tool-access.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .tool-card { 
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tool-card:hover {
+            transform: translateY(-8px);
+            border-color: #3b82f6;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+        .badge { 
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            margin-top: 0.5rem;
+        }
+        .badge-restricted {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+        .badge-public {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.5);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen">
 
+    <!-- Header/Navigation -->
+    <nav class="sticky top-0 z-50 glass px-6 py-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="font-black text-2xl tracking-tighter uppercase">
+                    <span class="text-blue-400">GIBIKEY</span>STUDIO
+                </h1>
+                <p id="userInfo" class="text-slate-400 text-sm mt-1"></p>
+            </div>
+            <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold transition-all">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <!-- Welcome Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-2">Selamat Datang!</h2>
+            <p class="text-slate-400">Pilih tool yang ingin Anda gunakan di bawah ini</p>
+        </div>
+
+        <!-- Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+            <!-- TOOL 1: Ketapang Khair v2.0 (RESTRICTED) -->
+            <a href="#" onclick="if(checkToolAccess('Ketapang Khair v2.0')) window.location.href='ketapang-khair.html'; return false;" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-map-location-dot text-4xl text-blue-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Ketapang Khair v2.0</h3>
+                <p class="text-slate-400 text-sm mt-2">Peta & Monitoring Wilayah Kerja</p>
+                <span class="badge badge-restricted">
+                    <i class="fas fa-lock mr-1"></i> Akses Terbatas
+                </span>
+            </a>
+
+            <!-- TOOL 2: Kesiapsiagaan (RESTRICTED) -->
+            <a href="#" onclick="if(checkToolAccess('Kesiapsiagaan')) window.location.href='kesiapsiagaan.html'; return false;" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-shield-alt text-4xl text-red-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Kesiapsiagaan</h3>
+                <p class="text-slate-400 text-sm mt-2">Status Kesiapan & Alert Lapangan</p>
+                <span class="badge badge-restricted">
+                    <i class="fas fa-lock mr-1"></i> Akses Terbatas
+                </span>
+            </a>
+
+            <!-- TOOL 3: Bhabin Gemoy (RESTRICTED) -->
+            <a href="#" onclick="if(checkToolAccess('Bhabin Gemoy')) window.location.href='bhabin-gemoy.html'; return false;" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-users-gear text-4xl text-yellow-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Bhabin Gemoy</h3>
+                <p class="text-slate-400 text-sm mt-2">Manajemen Personel & Tugas</p>
+                <span class="badge badge-restricted">
+                    <i class="fas fa-lock mr-1"></i> Akses Terbatas
+                </span>
+            </a>
+
+            <!-- TOOL 4: Tagihan Milenial v3.5 (PUBLIC) -->
+            <a href="tagihan-milenial.html" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-receipt text-4xl text-emerald-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Tagihan Milenial v3.5</h3>
+                <p class="text-slate-400 text-sm mt-2">Sistem Pembayaran & Invoice</p>
+                <span class="badge badge-public">
+                    <i class="fas fa-globe mr-1"></i> Public
+                </span>
+            </a>
+
+            <!-- TOOL 5: Timestamp Progege (PUBLIC) -->
+            <a href="timestamp-progege.html" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-clock text-4xl text-purple-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Timestamp Progege</h3>
+                <p class="text-slate-400 text-sm mt-2">Pencatat Waktu & Kronologi Kejadian</p>
+                <span class="badge badge-public">
+                    <i class="fas fa-globe mr-1"></i> Public
+                </span>
+            </a>
+
+            <!-- TOOL 6: Command Center (PUBLIC) -->
+            <a href="command-center.html" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-server text-4xl text-cyan-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Command Center</h3>
+                <p class="text-slate-400 text-sm mt-2">Pusat Kendali & Dashboard Utama</p>
+                <span class="badge badge-public">
+                    <i class="fas fa-globe mr-1"></i> Public
+                </span>
+            </a>
+
+            <!-- TOOL 7: Gibikey Karaoke (PUBLIC) -->
+            <a href="gibikey-karaoke.html" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-microphone text-4xl text-pink-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Gibikey Karaoke</h3>
+                <p class="text-slate-400 text-sm mt-2">Sistem Hiburan & Audio Visual</p>
+                <span class="badge badge-public">
+                    <i class="fas fa-globe mr-1"></i> Public
+                </span>
+            </a>
+
+            <!-- TOOL 8: Makelar Gorontalo (PUBLIC) -->
+            <a href="makelar-gorontalo.html" class="glass tool-card hover:bg-slate-800/50">
+                <i class="fas fa-building text-4xl text-orange-400 mb-3"></i>
+                <h3 class="text-lg font-bold">Makelar Gorontalo</h3>
+                <p class="text-slate-400 text-sm mt-2">Portal Properti & Real Estate</p>
+                <span class="badge badge-public">
+                    <i class="fas fa-globe mr-1"></i> Public
+                </span>
+            </a>
+
+        </div>
+
+        <!-- Info Section -->
+        <div class="glass p-8 rounded-2xl border border-slate-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-info-circle text-blue-400 mr-3"></i>
+                Informasi
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-slate-400 mb-2"><span class="font-bold text-blue-300">🔒 Akses Terbatas:</span> Hanya member terdaftar yang bisa akses dengan memasukkan NRP mereka</p>
+                </div>
+                <div>
+                    <p class="text-slate-400 mb-2"><span class="font-bold text-green-300">🌐 Public:</span> Semua member bisa akses tanpa perlu verifikasi NRP tambahan</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t border-slate-800 py-6 text-center text-slate-400">
+        <p>&copy; 2026 Gibikey Studio. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <script>
+        window.onload = () => {
+            checkUserSession();
+            displayUserInfo();
+        };
+
+        function checkUserSession() {
+            const userSession = JSON.parse(sessionStorage.getItem('userSession'));
+            
             if (!userSession) {
-                // Redirect to login page if session is not valid
                 window.location.href = 'login-otp.html';
-            } else {
-                // If session is valid, you might want to load user data, etc.
-                console.log('User session valid.');
             }
         }
 
-        // Call the function on load
-        window.onload = checkUserSession;
+        function displayUserInfo() {
+            const userSession = JSON.parse(sessionStorage.getItem('userSession'));
+            const userInfo = document.getElementById('userInfo');
+            
+            if (userSession.isAdmin) {
+                userInfo.innerHTML = `<i class="fas fa-shield-alt mr-1 text-amber-400"></i> Admin: ${userSession.nama} | <a href="admin-dashboard.html" class="text-blue-400 hover:text-blue-300 font-bold">Dashboard Admin</a>`;
+            } else {
+                userInfo.innerHTML = `<i class="fas fa-user-circle mr-1 text-blue-400"></i> Member: ${userSession.nama}`;
+            }
+        }
+
+        function logout() {
+            if (confirm('Yakin ingin logout?')) {
+                sessionStorage.removeItem('userSession');
+                sessionStorage.removeItem('toolNRP');
+                window.location.href = 'login-otp.html';
+            }
+        }
     </script>
-</head>
-<body>
-    <h1>Welcome to Gibikey Studio Tool</h1>
-    <p>This tool manages various GitHub integrations.</p>
+
 </body>
 </html>
