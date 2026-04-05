@@ -3,111 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP Login System | Gibikey Studio</title>
+    <title>Login - Gibikey Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f4f7f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 350px;
-        }
-        h2 { text-align: center; color: #333; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 20px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px;
-            box-sizing: border-box; /* Biar padding gak bikin input melebar */
-        }
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background-color: #007bff; 
-            color: white; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        button:hover { background-color: #0056b3; }
-        .hidden { display: none; }
-        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #888; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
-<body>
+<body class="text-slate-200 min-h-screen flex items-center justify-center">
 
-<div class="card">
-    <h2>OTP Login</h2>
-    
-    <div id="phone-section">
-        <label for="phone">Nomor Telepon:</label>
-        <input type="text" id="phone" placeholder="Contoh: 08123456xxx" required>
-        <button id="get-otp">Kirim OTP</button>
+    <div class="w-full max-w-md mx-auto px-6">
+        <div class="glass p-8 rounded-2xl border border-slate-700">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold mb-2 uppercase tracking-tight">
+                    <span class="text-blue-400">GIBIKEY</span>STUDIO
+                </h1>
+                <p class="text-slate-400 text-sm">Sistem Akses Member</p>
+            </div>
+
+            <!-- Tab Selection -->
+            <div class="flex gap-2 mb-6 bg-slate-800/50 p-1 rounded-lg">
+                <button onclick="switchTab('login')" id="loginTab" class="flex-1 py-2 px-4 rounded-md bg-blue-600 font-bold text-sm transition-all">
+                    Login
+                </button>
+                <button onclick="switchTab('register')" id="registerTab" class="flex-1 py-2 px-4 rounded-md text-slate-400 font-bold text-sm transition-all hover:text-white">
+                    Daftar
+                </button>
+                <button onclick="switchTab('admin')" id="adminTab" class="flex-1 py-2 px-4 rounded-md text-slate-400 font-bold text-sm transition-all hover:text-white">
+                    Admin
+                </button>
+            </div>
+
+            <!-- ========== TAB LOGIN ========== -->
+            <div id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">Pilih Nama Anda</label>
+                    <select id="nameLogin" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                        <option value="">-- Pilih Nama --</option>
+                    </select>
+                </div>
+                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Masuk
+                </button>
+                <p class="text-center text-slate-400 text-xs">Login sebagai member yang sudah disetujui admin</p>
+            </div>
+
+            <!-- ========== TAB DAFTAR ========== -->
+            <div id="registerForm" class="space-y-4 hidden max-h-96 overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-bold mb-2">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Contoh: Budi Santoso" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Tempat, Tanggal Lahir</label>
+                    <input type="text" id="ttl" placeholder="Contoh: Jakarta, 15-05-1990" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Pekerjaan</label>
+                    <input type="text" id="pekerjaan" placeholder="Contoh: Polisi" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Alamat</label>
+                    <textarea id="alamat" placeholder="Contoh: Jl. Merdeka No. 123" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 resize-none h-20"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Nomor WhatsApp</label>
+                    <input type="text" id="wa" placeholder="Contoh: 6285298833350" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Foto Selfie</label>
+                    <input type="file" id="foto" accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-slate-400 mt-1">Format: JPG, PNG (Max 5MB)</p>
+                </div>
+                <button onclick="handleRegister()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all">
+                    <i class="fas fa-user-plus mr-2"></i> Daftar
+                </button>
+                <p class="text-center text-slate-400 text-xs">Form akan ditinjau admin</p>
+            </div>
+
+            <!-- ========== TAB ADMIN ========== -->
+            <div id="adminForm" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-bold mb-2">NRP Admin</label>
+                    <input type="password" id="nrpAdmin" placeholder="Masukkan NRP Admin" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+                <button onclick="handleAdminLogin()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-lg transition-all">
+                    <i class="fas fa-shield-alt mr-2"></i> Login Admin
+                </button>
+                <p class="text-center text-slate-400 text-xs">Akses eksklusif untuk admin system</p>
+            </div>
+
+            <!-- Message Alert -->
+            <div id="alertBox" class="mt-4 p-3 rounded-lg text-sm hidden"></div>
+
+        </div>
     </div>
 
-    <div id="otp-section" class="hidden">
-        <label for="otp">Masukkan Kode OTP:</label>
-        <input type="text" id="otp" placeholder="6 Digit Kode" maxlength="6">
-        <button id="verify-otp">Verifikasi & Login</button>
-        <p style="text-align:center; font-size: 13px;">
-            <a href="#" onclick="location.reload()" style="color:#007bff; text-decoration:none;">Ganti Nomor?</a>
-        </p>
-    </div>
+    <script>
+        const adminNRP = "88040773";
 
-    <div class="footer">
-        Powered by <strong>Gibikey Studio</strong>
-    </div>
-</div>
+        window.onload = () => {
+            loadApprovedMembers();
+        };
 
-<script>
-    const phoneSection = document.getElementById('phone-section');
-    const otpSection = document.getElementById('otp-section');
-    const getOtpBtn = document.getElementById('get-otp');
-    const verifyOtpBtn = document.getElementById('verify-otp');
-
-    getOtpBtn.onclick = function() {
-        const phone = document.getElementById('phone').value;
-        
-        if (phone.length < 10) {
-            alert('Masukkan nomor telepon yang valid!');
-            return;
+        function loadApprovedMembers() {
+            const members = JSON.parse(localStorage.getItem('approvedMembers')) || [];
+            const select = document.getElementById('nameLogin');
+            
+            members.forEach(member => {
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.textContent = member.nama;
+                select.appendChild(option);
+            });
         }
 
-        // Simulasi pengiriman OTP
-        alert('Sukses! Kode OTP telah dikirim ke ' + phone);
-        
-        // Sembunyikan input nomor, munculkan input OTP
-        phoneSection.classList.add('hidden');
-        otpSection.classList.remove('hidden');
-    };
+        function switchTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const adminForm = document.getElementById('adminForm');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const adminTab = document.getElementById('adminTab');
 
-    verifyOtpBtn.onclick = function() {
-        const otp = document.getElementById('otp').value;
-        
-        if (otp === "") {
-            alert('Silakan masukkan kode OTP!');
-            return;
+            loginForm.classList.add('hidden');
+            registerForm.classList.add('hidden');
+            adminForm.classList.add('hidden');
+            loginTab.classList.remove('bg-blue-600');
+            registerTab.classList.remove('bg-blue-600');
+            adminTab.classList.remove('bg-blue-600');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                loginTab.classList.add('bg-blue-600');
+            } else if (tab === 'register') {
+                registerForm.classList.remove('hidden');
+                registerTab.classList.add('bg-blue-600');
+            } else if (tab === 'admin') {
+                adminForm.classList.remove('hidden');
+                adminTab.classList.add('bg-blue-600');
+            }
         }
 
-        // Simulasi verifikasi
-        alert('Verifikasi Berhasil! Selamat Datang.');
-        // Di sini kamu bisa arahkan ke halaman lain: window.location.href = "dashboard.html";
-    };
-</script>
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = 'mt-4 p-3 rounded-lg text-sm';
+            
+            if (type === 'success') {
+                alertBox.classList.add('bg-green-500/20', 'border', 'border-green-500/50', 'text-green-300');
+            } else if (type === 'error') {
+                alertBox.classList.add('bg-red-500/20', 'border', 'border-red-500/50', 'text-red-300');
+            } else {
+                alertBox.classList.add('bg-blue-500/20', 'border', 'border-blue-500/50', 'text-blue-300');
+            }
+            alertBox.classList.remove('hidden');
+        }
+
+        function handleLogin() {
+            const memberId = document.getElementById('nameLogin').value;
+            
+            if (!memberId) {
+                showAlert('Pilih nama Anda terlebih dahulu!', 'error');
+                return;
+            }
+
+            const members = JSON.parse(localStorage.getItem('approvedMembers')) || [];
+            const member = members.find(m => m.id === memberId);
+
+            if (!member) {
+                showAlert('Member tidak ditemukan!', 'error');
+                return;
+            }
+
+            sessionStorage.setItem('userSession', JSON.stringify({
+                id: member.id,
+                nama: member.nama,
+                isAdmin: false,
+                loginTime: new Date().toLocaleString('id-ID')
+            }));
+
+            showAlert(`✓ Selamat datang ${member.nama}!`, 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        function handleRegister() {
+            const nama = document.getElementById('nama').value.trim();
+            const ttl = document.getElementById('ttl').value.trim();
+            const pekerjaan = document.getElementById('pekerjaan').value.trim();
+            const alamat = document.getElementById('alamat').value.trim();
+            const wa = document.getElementById('wa').value.trim();
+            const fotoInput = document.getElementById('foto');
+
+            if (!nama || !ttl || !pekerjaan || !alamat || !wa) {
+                showAlert('Lengkapi semua data terlebih dahulu!', 'error');
+                return;
+            }
+
+            if (!fotoInput.files || fotoInput.files.length === 0) {
+                showAlert('Pilih foto selfie!', 'error');
+                return;
+            }
+
+            const file = fotoInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const newMember = {
+                    id: Date.now().toString(),
+                    nama: nama,
+                    ttl: ttl,
+                    pekerjaan: pekerjaan,
+                    alamat: alamat,
+                    wa: wa,
+                    foto: e.target.result,
+                    status: 'Pending',
+                    tanggalDaftar: new Date().toLocaleString('id-ID'),
+                    approved: false
+                };
+
+                let pendingMembers = JSON.parse(localStorage.getItem('pendingMembers')) || [];
+                pendingMembers.push(newMember);
+                localStorage.setItem('pendingMembers', JSON.stringify(pendingMembers));
+
+                showAlert(`✓ Pendaftaran berhasil! Admin akan meninjau data Anda.`, 'success');
+                
+                document.getElementById('nama').value = '';
+                document.getElementById('ttl').value = '';
+                document.getElementById('pekerjaan').value = '';
+                document.getElementById('alamat').value = '';
+                document.getElementById('wa').value = '';
+                document.getElementById('foto').value = '';
+
+                setTimeout(() => {
+                    switchTab('login');
+                }, 2000);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function handleAdminLogin() {
+            const nrp = document.getElementById('nrpAdmin').value;
+
+            if (!nrp) {
+                showAlert('Masukkan NRP admin!', 'error');
+                return;
+            }
+
+            if (nrp === adminNRP) {
+                sessionStorage.setItem('userSession', JSON.stringify({
+                    nama: 'Kaka_Khair',
+                    isAdmin: true,
+                    nrp: nrp,
+                    loginTime: new Date().toLocaleString('id-ID')
+                }));
+
+                showAlert('✓ Admin terverifikasi! Selamat datang.', 'success');
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+            } else {
+                showAlert('NRP admin salah!', 'error');
+            }
+        }
+    </script>
 
 </body>
 </html>
