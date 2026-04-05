@@ -41,6 +41,9 @@
             <button onclick="switchAdminTab('warnings')" id="warningsTab" class="px-6 py-3 font-bold text-slate-400 hover:text-white border-b-2 border-transparent">
                 <i class="fas fa-exclamation-triangle mr-2"></i> Peringatan
             </button>
+            <button onclick="switchAdminTab('banned')" id="bannedTab" class="px-6 py-3 font-bold text-slate-400 hover:text-white border-b-2 border-transparent">
+                <i class="fas fa-ban mr-2"></i> Banned Member
+            </button>
         </div>
 
         <!-- ========== PENDING APPROVAL ========== -->
@@ -90,7 +93,7 @@
                                 <th class="px-6 py-4 text-left font-bold">Nama</th>
                                 <th class="px-6 py-4 text-left font-bold">Waktu Login</th>
                                 <th class="px-6 py-4 text-left font-bold">Tool</th>
-                                <th class="px-6 py-4 text-left font-bold">NRP Input</th>
+                                <th class="px-6 py-4 text-left font-bold">Kode Input</th>
                             </tr>
                         </thead>
                         <tbody id="historyTable">
@@ -116,6 +119,12 @@
                         <label class="block text-sm font-bold mb-2">Pesan Peringatan</label>
                         <textarea id="warningMessage" placeholder="Ketik pesan peringatan..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 resize-none h-24"></textarea>
                     </div>
+                    <div>
+                        <label class="flex items-center gap-2 text-sm font-bold mb-2">
+                            <input type="checkbox" id="banMember" class="w-4 h-4 rounded">
+                            Ban member selama 3 jam (Tidak bisa mengakses apapun)
+                        </label>
+                    </div>
                     <button onclick="sendWarning()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold">
                         <i class="fas fa-exclamation-triangle mr-2"></i> Kirim Peringatan
                     </button>
@@ -130,11 +139,35 @@
                                 <th class="px-6 py-4 text-left font-bold">No</th>
                                 <th class="px-6 py-4 text-left font-bold">Member</th>
                                 <th class="px-6 py-4 text-left font-bold">Pesan</th>
+                                <th class="px-6 py-4 text-left font-bold">Ban</th>
                                 <th class="px-6 py-4 text-left font-bold">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody id="warningsTable">
-                            <tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">Tidak ada peringatan</td></tr>
+                            <tr><td colspan="5" class="px-6 py-8 text-center text-slate-400">Tidak ada peringatan</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== BANNED MEMBER ========== -->
+        <div id="bannedSection" class="hidden">
+            <div class="glass rounded-2xl border border-slate-700 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-800/50 border-b border-slate-700">
+                            <tr>
+                                <th class="px-6 py-4 text-left font-bold">No</th>
+                                <th class="px-6 py-4 text-left font-bold">Member</th>
+                                <th class="px-6 py-4 text-left font-bold">Alasan</th>
+                                <th class="px-6 py-4 text-left font-bold">Waktu Ban</th>
+                                <th class="px-6 py-4 text-left font-bold">Sisa Waktu</th>
+                                <th class="px-6 py-4 text-left font-bold">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bannedTable">
+                            <tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">Tidak ada member yang di-ban</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -144,7 +177,7 @@
     </main>
 
     <script>
-        const adminNRP = "88040773";
+        const adminKode = "88040773";
 
         window.onload = () => {
             checkAdminAccess();
@@ -153,6 +186,10 @@
             loadLoginHistory();
             loadWarnings();
             loadMemberSelect();
+            loadBannedMembers();
+            
+            // Update banned members setiap 10 detik
+            setInterval(loadBannedMembers, 10000);
         };
 
         function checkAdminAccess() {
@@ -167,11 +204,13 @@
             document.getElementById('membersSection').classList.add('hidden');
             document.getElementById('historySection').classList.add('hidden');
             document.getElementById('warningsSection').classList.add('hidden');
+            document.getElementById('bannedSection').classList.add('hidden');
 
             document.getElementById('pendingTab').classList.remove('border-blue-400', 'text-blue-400');
             document.getElementById('membersTab').classList.remove('border-blue-400', 'text-blue-400');
             document.getElementById('historyTab').classList.remove('border-blue-400', 'text-blue-400');
             document.getElementById('warningsTab').classList.remove('border-blue-400', 'text-blue-400');
+            document.getElementById('bannedTab').classList.remove('border-blue-400', 'text-blue-400');
 
             if (tab === 'pending') {
                 document.getElementById('pendingSection').classList.remove('hidden');
@@ -188,6 +227,11 @@
             } else if (tab === 'warnings') {
                 document.getElementById('warningsSection').classList.remove('hidden');
                 document.getElementById('warningsTab').classList.add('border-blue-400', 'text-blue-400');
+                loadWarnings();
+            } else if (tab === 'banned') {
+                document.getElementById('bannedSection').classList.remove('hidden');
+                document.getElementById('bannedTab').classList.add('border-blue-400', 'text-blue-400');
+                loadBannedMembers();
             }
         }
 
@@ -280,7 +324,7 @@
                         <td class="px-6 py-4 font-bold text-blue-400">${log.nama}</td>
                         <td class="px-6 py-4 text-slate-300 text-xs">${log.loginTime}</td>
                         <td class="px-6 py-4 text-slate-300">${log.tool || '-'}</td>
-                        <td class="px-6 py-4 text-slate-300">${log.nrpInput || '-'}</td>
+                        <td class="px-6 py-4 text-slate-300">${log.kodeInput || '-'}</td>
                     </tr>
                 `;
             });
@@ -293,18 +337,61 @@
             const tbody = document.getElementById('warningsTable');
 
             if (warnings.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">Tidak ada peringatan</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-400">Tidak ada peringatan</td></tr>';
                 return;
             }
 
             let rows = '';
             warnings.slice().reverse().forEach((warn, idx) => {
+                const banStatus = warn.isBanned ? '✓ Ya' : '✗ Tidak';
+                const banColor = warn.isBanned ? 'text-red-400' : 'text-green-400';
                 rows += `
                     <tr class="border-b border-slate-700">
                         <td class="px-6 py-4">${warnings.length - idx}</td>
                         <td class="px-6 py-4 font-bold text-blue-400">${warn.memberName}</td>
                         <td class="px-6 py-4 text-slate-300">${warn.message}</td>
+                        <td class="px-6 py-4 ${banColor} font-bold">${banStatus}</td>
                         <td class="px-6 py-4 text-slate-400 text-xs">${warn.date}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = rows;
+        }
+
+        function loadBannedMembers() {
+            const banned = JSON.parse(localStorage.getItem('bannedMembers')) || [];
+            const tbody = document.getElementById('bannedTable');
+
+            // Hapus ban yang sudah expired
+            const now = new Date().getTime();
+            const validBans = banned.filter(ban => ban.unbanTime > now);
+            localStorage.setItem('bannedMembers', JSON.stringify(validBans));
+
+            if (validBans.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">Tidak ada member yang di-ban</td></tr>';
+                return;
+            }
+
+            let rows = '';
+            validBans.forEach((ban, idx) => {
+                const now = new Date().getTime();
+                const sisaMs = ban.unbanTime - now;
+                const sisaJam = Math.ceil(sisaMs / (1000 * 60 * 60));
+                const sisaMenit = Math.ceil((sisaMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                rows += `
+                    <tr class="border-b border-slate-700">
+                        <td class="px-6 py-4">${idx + 1}</td>
+                        <td class="px-6 py-4 font-bold text-red-400">${ban.memberName}</td>
+                        <td class="px-6 py-4 text-slate-300">${ban.reason}</td>
+                        <td class="px-6 py-4 text-slate-400 text-xs">${ban.bannedAt}</td>
+                        <td class="px-6 py-4 font-bold text-orange-400">${sisaJam}j ${sisaMenit}m</td>
+                        <td class="px-6 py-4">
+                            <button onclick="unbanMember('${ban.memberId}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold">
+                                <i class="fas fa-unlock mr-1"></i> Unban
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -370,6 +457,7 @@
         function sendWarning() {
             const memberId = document.getElementById('memberSelect').value;
             const message = document.getElementById('warningMessage').value.trim();
+            const isBanned = document.getElementById('banMember').checked;
 
             if (!memberId || !message) {
                 alert('Pilih member dan ketik pesan!');
@@ -381,10 +469,12 @@
 
             if (!member) return;
 
+            // Catat peringatan
             const warning = {
                 memberId: memberId,
                 memberName: member.nama,
                 message: message,
+                isBanned: isBanned,
                 date: new Date().toLocaleString('id-ID')
             };
 
@@ -392,19 +482,54 @@
             warnings.push(warning);
             localStorage.setItem('warnings', JSON.stringify(warnings));
 
+            // Jika di-ban, tambahkan ke banned list
+            if (isBanned) {
+                const banTime = 3 * 60 * 60 * 1000; // 3 jam
+                const unbanTime = new Date().getTime() + banTime;
+
+                const ban = {
+                    memberId: memberId,
+                    memberName: member.nama,
+                    reason: message,
+                    bannedAt: new Date().toLocaleString('id-ID'),
+                    unbanTime: unbanTime
+                };
+
+                let bannedMembers = JSON.parse(localStorage.getItem('bannedMembers')) || [];
+                bannedMembers.push(ban);
+                localStorage.setItem('bannedMembers', JSON.stringify(bannedMembers));
+            }
+
+            // Reset form
             document.getElementById('memberSelect').value = '';
             document.getElementById('warningMessage').value = '';
+            document.getElementById('banMember').checked = false;
 
             loadWarnings();
-            alert(`✓ Peringatan telah dikirim ke ${member.nama}`);
+            loadBannedMembers();
+            loadMemberSelect();
+
+            const banText = isBanned ? ' dan di-BAN selama 3 jam' : '';
+            alert(`✓ Peringatan telah dikirim ke ${member.nama}${banText}`);
+        }
+
+        function unbanMember(memberId) {
+            if (confirm('Yakin ingin membuka ban member ini?')) {
+                const banned = JSON.parse(localStorage.getItem('bannedMembers')) || [];
+                const updatedBanned = banned.filter(b => b.memberId !== memberId);
+                localStorage.setItem('bannedMembers', JSON.stringify(updatedBanned));
+
+                loadBannedMembers();
+                alert('Member telah di-unban');
+            }
         }
 
         function exportData() {
             const history = JSON.parse(localStorage.getItem('loginHistory')) || [];
             
-            let csv = 'No,Nama,Waktu Login,Tool,NRP Input\n';
+            let csv = 'No,Nama,Waktu Login,Tool,Kode Input\n';
             history.forEach((log, idx) => {
-                csv += `${idx + 1},"${log.nama}","${log.loginTime}","${log.tool || '-'}","${log.nrpInput || '-'}"\n`;
+                csv += `${idx + 1},"${log.nama}","${log.loginTime}","${log.tool || '-'}","${log.kodeInput || '-'}"\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
