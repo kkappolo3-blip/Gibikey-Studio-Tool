@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .card { border: 1px solid #ccc; padding: 20px; margin: 10px; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f4f4f4; }
+    </style>
+    <script>
+        function fetchLoginData() {
+            // Fetch login history from the server
+            // This would typically involve an API call
+            // Example: fetch('/api/login-history').then(response => response.json()).then(data => populateTable(data));
+        }
+
+        function populateTable(data) {
+            const tableBody = document.getElementById('loginHistory');
+            tableBody.innerHTML = '';
+            data.forEach(login => {
+                const row = `<tr><td>${login.timestamp}</td><td>${login.user}</td><td>${login.admin ? 'Yes' : 'No'}</td></tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function exportToCSV() {
+            // Export login data to CSV
+            // This would typically involve converting the data to CSV format and triggering a download
+            const csvContent = 'data:text/csv;charset=utf-8,Timestamp,User,Admin\n' + 
+                /* CSV generation logic here */;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'login_history.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        setInterval(fetchLoginData, 60000); // Auto-refresh every minute
+    </script>
+</head>
+<body onload="fetchLoginData()">
+    <h1>Admin Dashboard</h1>
+    <div class="card">
+        <h2>Statistics</h2>
+        <p>Total Logins: <span id="totalLogins">0</span></p>
+        <p>Unique Users: <span id="uniqueUsers">0</span></p>
+        <p>Admin Logins: <span id="adminLogins">0</span></p>
+    </div>
+    <button onclick="exportToCSV()">Export Login Data</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>User</th>
+                <th>Admin</th>
+            </tr>
+        </thead>
+        <tbody id="loginHistory">
+            <!-- Login history will be populated here -->
+        </tbody>
+    </table>
+</body>
+</html>
