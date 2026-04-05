@@ -1,69 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard | Gibikey Studio</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .card { border: 1px solid #ccc; padding: 20px; margin: 10px; border-radius: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
-        th { background-color: #f4f4f4; }
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        h1 { color: var(--text); border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 30px; }
+        
+        /* Grid untuk Statistik */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .card h2 { margin: 0; font-size: 14px; color: #64748b; text-transform: uppercase; }
+        .card p { margin: 10px 0 0; font-size: 24px; font-weight: bold; color: var(--primary); }
+
+        /* Tabel */
+        .table-container { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background-color: #f1f5f9; padding: 15px; font-size: 13px; color: #475569; }
+        td { padding: 15px; border-top: 1px solid #e2e8f0; font-size: 14px; }
+        tr:hover { background-color: #f8fafc; }
+
+        /* Badge */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .badge-admin { background: #dcfce7; color: #166534; }
+        .badge-user { background: #e0f2fe; color: #075985; }
+
+        /* Button */
+        button { 
+            background: var(--primary); color: white; border: none; padding: 10px 20px; 
+            border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 20px;
+            transition: opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
+
+        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #94a3b8; }
     </style>
+</head>
+<body onload="initDashboard()">
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="stats-grid">
+        <div class="card">
+            <h2>Total Logins</h2>
+            <p id="totalLogins">0</p>
+        </div>
+        <div class="card">
+            <h2>Unique Users</h2>
+            <p id="uniqueUsers">0</p>
+        </div>
+        <div class="card">
+            <h2>Admin Logins</h2>
+            <p id="adminLogins">0</p>
+        </div>
+    </div>
+
+    <button onclick="exportToCSV()">💾 Export ke CSV</button>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>WAKTU (TIMESTAMP)</th>
+                    <th>NAMA USER</th>
+                    <th>ROLE</th>
+                </tr>
+            </thead>
+            <tbody id="loginHistory">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 <strong>Gibikey Studio</strong> - Digital Monitoring System
+    </div>
+
     <script>
-        function fetchLoginData() {
-            // Fetch login history from the server
-            // This would typically involve an API call
-            // Example: fetch('/api/login-history').then(response => response.json()).then(data => populateTable(data));
+        // Data Simulasi (Contoh)
+        let loginData = [
+            { timestamp: '2026-04-05 18:30:12', user: 'Bripka Ahmad', admin: true },
+            { timestamp: '2026-04-05 18:45:05', user: 'User_01', admin: false },
+            { timestamp: '2026-04-05 19:02:44', user: 'Admin_Piket', admin: true },
+            { timestamp: '2026-04-05 19:10:20', user: 'User_02', admin: false }
+        ];
+
+        function initDashboard() {
+            populateTable(loginData);
+            updateStats(loginData);
+        }
+
+        function updateStats(data) {
+            document.getElementById('totalLogins').innerText = data.length;
+            const unique = [...new Set(data.map(item => item.user))].length;
+            document.getElementById('uniqueUsers').innerText = unique;
+            const admins = data.filter(item => item.admin).length;
+            document.getElementById('adminLogins').innerText = admins;
         }
 
         function populateTable(data) {
             const tableBody = document.getElementById('loginHistory');
             tableBody.innerHTML = '';
             data.forEach(login => {
-                const row = `<tr><td>${login.timestamp}</td><td>${login.user}</td><td>${login.admin ? 'Yes' : 'No'}</td></tr>`;
-                tableBody.insertAdjacentHTML('beforeend', row);
+                const roleBadge = login.admin ? 
+                    '<span class="badge badge-admin">ADMIN</span>' : 
+                    '<span class="badge badge-user">USER</span>';
+                
+                const row = `<tr>
+                    <td>${login.timestamp}</td>
+                    <td>${login.user}</td>
+                    <td>${roleBadge}</td>
+                </tr>`;
+                tableBody.insertAdjacentHTML('afterbegin', row); // Data terbaru di atas
             });
         }
 
         function exportToCSV() {
-            // Export login data to CSV
-            // This would typically involve converting the data to CSV format and triggering a download
-            const csvContent = 'data:text/csv;charset=utf-8,Timestamp,User,Admin\n' + 
-                /* CSV generation logic here */;
+            let csvContent = "data:text/csv;charset=utf-8,Timestamp,User,IsAdmin\n";
+            
+            loginData.forEach(row => {
+                csvContent += `${row.timestamp},${row.user},${row.admin}\n`;
+            });
+
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement('a');
             link.setAttribute('href', encodedUri);
-            link.setAttribute('download', 'login_history.csv');
+            link.setAttribute('download', 'Laporan_Login_Gibikey.csv');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        setInterval(fetchLoginData, 60000); // Auto-refresh every minute
+        // Auto-refresh setiap 1 menit (Simulasi refresh data)
+        setInterval(() => {
+            console.log("Memperbarui data...");
+            // Di sini nanti tempat API fetch kamu
+        }, 60000);
     </script>
-</head>
-<body onload="fetchLoginData()">
-    <h1>Admin Dashboard</h1>
-    <div class="card">
-        <h2>Statistics</h2>
-        <p>Total Logins: <span id="totalLogins">0</span></p>
-        <p>Unique Users: <span id="uniqueUsers">0</span></p>
-        <p>Admin Logins: <span id="adminLogins">0</span></p>
-    </div>
-    <button onclick="exportToCSV()">Export Login Data</button>
-    <table>
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>User</th>
-                <th>Admin</th>
-            </tr>
-        </thead>
-        <tbody id="loginHistory">
-            <!-- Login history will be populated here -->
-        </tbody>
-    </table>
 </body>
 </html>
