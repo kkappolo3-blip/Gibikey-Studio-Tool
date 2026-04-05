@@ -1,4 +1,4 @@
-// tool-access.js - Letakkan di folder yang sama dengan tools
+// tool-access.js - Ganti NRP dengan Kode
 
 function checkToolAccess(toolName) {
     const userSession = JSON.parse(sessionStorage.getItem('userSession'));
@@ -11,19 +11,19 @@ function checkToolAccess(toolName) {
 
     // Admin bypass
     if (userSession.isAdmin) {
-        logToolAccess(userSession.nama, toolName, userSession.nrp || 'N/A');
+        logToolAccess(userSession.nama, toolName, userSession.kode || 'N/A');
         return true;
     }
 
-    // Request NRP input
-    const nrp = prompt(`Masukkan NRP Anda untuk akses ${toolName}:`);
+    // Request Kode input
+    const kode = prompt(`Masukkan Kode Anda untuk akses ${toolName}:`);
     
-    if (!nrp) {
-        alert('NRP harus diisi untuk akses tool ini');
+    if (!kode) {
+        alert('Kode harus diisi untuk akses tool ini');
         return false;
     }
 
-    // Verify NRP
+    // Verify Kode
     const approvedMembers = JSON.parse(localStorage.getItem('approvedMembers')) || [];
     const member = approvedMembers.find(m => m.id === userSession.id);
 
@@ -32,19 +32,19 @@ function checkToolAccess(toolName) {
         return false;
     }
 
-    // Store NRP untuk tool
-    sessionStorage.setItem('toolNRP', nrp);
+    // Store Kode untuk tool
+    sessionStorage.setItem('toolKode', kode);
     
-    logToolAccess(userSession.nama, toolName, nrp);
+    logToolAccess(userSession.nama, toolName, kode);
     return true;
 }
 
-function logToolAccess(nama, tool, nrp) {
+function logToolAccess(nama, tool, kode) {
     const log = {
         nama: nama,
         loginTime: new Date().toLocaleString('id-ID'),
         tool: tool,
-        nrpInput: nrp
+        kodeInput: kode
     };
 
     let history = JSON.parse(localStorage.getItem('loginHistory')) || [];
@@ -52,18 +52,19 @@ function logToolAccess(nama, tool, nrp) {
     localStorage.setItem('loginHistory', JSON.stringify(history));
 }
 
-// Tools yang memerlukan akses terbatas (pakai NRP)
+// Tools yang memerlukan akses terbatas (pakai Kode)
 const restrictedTools = [
     'Ketapang Khair v2.0',
     'Kesiapsiagaan',
     'Bhabin Gemoy'
 ];
 
-// Tools yang public (tanpa NRP)
+// Tools yang public (tanpa Kode)
 const publicTools = [
+    'Gibikey Karaoke',
+    'Tool Tracker',
     'Tagihan Milenial v3.5',
     'Timestamp Progege',
     'Command Center',
-    'Gibikey Karaoke',
     'Makelar Gorontalo'
 ];
