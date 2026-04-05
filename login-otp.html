@@ -1,1 +1,113 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>OTP Login System</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 20px; }\n        #otp-container { display: flex; flex-direction: column; max-width: 400px; }\n    </style>\n</head>\n<body>\n    <h2>OTP Login System</h2>\n    <div id="otp-container">\n        <label for="phone">Phone Number:</label>\n        <input type="text" id="phone" placeholder="Enter phone number" required>\n        <button id="get-otp">Get OTP</button>\n        <label for="otp">Enter OTP:</label>\n        <input type="text" id="otp" placeholder="Enter received OTP" required>\n        <button id="verify-otp">Verify OTP</button>\n    </div>\n    <script>\n        document.getElementById('get-otp').onclick = function() {\n            const phone = document.getElementById('phone').value;\n            // Send OTP request to backend (implement API)\n            alert('OTP sent to ' + phone);\n        };\n        document.getElementById('verify-otp').onclick = function() {\n            const otp = document.getElementById('otp').value;\n            // Verify OTP request to backend (implement API)\n            alert('OTP verified');\n        };\n    <\/script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Login System | Gibikey Studio</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px;
+            box-sizing: border-box; /* Biar padding gak bikin input melebar */
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+        .hidden { display: none; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #888; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>OTP Login</h2>
+    
+    <div id="phone-section">
+        <label for="phone">Nomor Telepon:</label>
+        <input type="text" id="phone" placeholder="Contoh: 08123456xxx" required>
+        <button id="get-otp">Kirim OTP</button>
+    </div>
+
+    <div id="otp-section" class="hidden">
+        <label for="otp">Masukkan Kode OTP:</label>
+        <input type="text" id="otp" placeholder="6 Digit Kode" maxlength="6">
+        <button id="verify-otp">Verifikasi & Login</button>
+        <p style="text-align:center; font-size: 13px;">
+            <a href="#" onclick="location.reload()" style="color:#007bff; text-decoration:none;">Ganti Nomor?</a>
+        </p>
+    </div>
+
+    <div class="footer">
+        Powered by <strong>Gibikey Studio</strong>
+    </div>
+</div>
+
+<script>
+    const phoneSection = document.getElementById('phone-section');
+    const otpSection = document.getElementById('otp-section');
+    const getOtpBtn = document.getElementById('get-otp');
+    const verifyOtpBtn = document.getElementById('verify-otp');
+
+    getOtpBtn.onclick = function() {
+        const phone = document.getElementById('phone').value;
+        
+        if (phone.length < 10) {
+            alert('Masukkan nomor telepon yang valid!');
+            return;
+        }
+
+        // Simulasi pengiriman OTP
+        alert('Sukses! Kode OTP telah dikirim ke ' + phone);
+        
+        // Sembunyikan input nomor, munculkan input OTP
+        phoneSection.classList.add('hidden');
+        otpSection.classList.remove('hidden');
+    };
+
+    verifyOtpBtn.onclick = function() {
+        const otp = document.getElementById('otp').value;
+        
+        if (otp === "") {
+            alert('Silakan masukkan kode OTP!');
+            return;
+        }
+
+        // Simulasi verifikasi
+        alert('Verifikasi Berhasil! Selamat Datang.');
+        // Di sini kamu bisa arahkan ke halaman lain: window.location.href = "dashboard.html";
+    };
+</script>
+
+</body>
+</html>
